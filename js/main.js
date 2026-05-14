@@ -81,60 +81,36 @@
      Disabled on touch devices (handled via CSS).
   ---------------------------------------------------------- */
   function initCursor() {
-    const dot  = $('#cursor-dot');
-    const ring = $('#cursor-ring');
-    if (!dot || !ring) return;
+  const dot = $('#cursor-dot');
+  if (!dot) return;
 
-    // Skip on touch-only devices
-    if (!window.matchMedia('(pointer: fine)').matches) return;
+  // Désactivé sur écrans tactiles
+  if (!window.matchMedia('(pointer: fine)').matches) return;
 
-    let mouseX = 0, mouseY = 0;
-    let ringX  = 0, ringY  = 0;
+  // Le point suit la souris instantanément
+  document.addEventListener('mousemove', function (e) {
+    dot.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
+  });
 
-    document.addEventListener('mousemove', function (e) {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+  // Légèrement agrandi au survol des éléments interactifs
+  const hoverTargets = 'a, button, input, textarea, .glass-card';
 
-      // Dot follows instantly
-      dot.style.transform = `translate(${mouseX - 3}px, ${mouseY - 3}px)`;
-    });
-
-    // Ring follows with smooth lag via requestAnimationFrame
-    function animateRing() {
-      ringX += (mouseX - ringX) * 0.14;
-      ringY += (mouseY - ringY) * 0.14;
-      ring.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px)`;
-      requestAnimationFrame(animateRing);
+  document.addEventListener('mouseover', function (e) {
+    if (e.target.closest(hoverTargets)) {
+      document.body.classList.add('cursor-hover');
     }
+  });
 
-    animateRing();
+  document.addEventListener('mouseout', function (e) {
+    if (e.target.closest(hoverTargets)) {
+      document.body.classList.remove('cursor-hover');
+    }
+  });
 
-    // Expand ring on interactive elements
-    const hoverTargets = 'a, button, .glass-card, .project-card, .service-card, input, textarea, .nav-link';
-
-    document.addEventListener('mouseover', function (e) {
-      if (e.target.closest(hoverTargets)) {
-        document.body.classList.add('cursor-hover');
-      }
-    });
-
-    document.addEventListener('mouseout', function (e) {
-      if (e.target.closest(hoverTargets)) {
-        document.body.classList.remove('cursor-hover');
-      }
-    });
-
-    // Hide when leaving window
-    document.addEventListener('mouseleave', function () {
-      dot.style.opacity  = '0';
-      ring.style.opacity = '0';
-    });
-
-    document.addEventListener('mouseenter', function () {
-      dot.style.opacity  = '1';
-      ring.style.opacity = '0.7';
-    });
-  }
+  // Disparaît quand la souris quitte la fenêtre
+  document.addEventListener('mouseleave', function () { dot.style.opacity = '0'; });
+  document.addEventListener('mouseenter', function () { dot.style.opacity = '1'; });
+}
 
   /* ----------------------------------------------------------
      4. TYPING EFFECT

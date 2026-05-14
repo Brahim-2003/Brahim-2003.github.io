@@ -151,8 +151,8 @@ input, textarea, select { font-family: inherit; }
    5. CUSTOM CURSOR
    ============================================================ */
 #cursor-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background: var(--accent);
   border-radius: 50%;
   position: fixed;
@@ -160,7 +160,10 @@ input, textarea, select { font-family: inherit; }
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: transform 80ms linear, opacity var(--transition-fast);
+  transition: transform 0.1s linear,
+              width 0.2s ease,
+              height 0.2s ease,
+              opacity 0.2s ease;
 }
 
 #cursor-ring {
@@ -179,12 +182,21 @@ input, textarea, select { font-family: inherit; }
   opacity: 0.7;
 }
 
-body.cursor-hover #cursor-ring {
-  width: 52px;
-  height: 52px;
-  background: var(--accent-subtle);
-  border-color: var(--accent-light);
+/* S'agrandit légèrement au survol des éléments cliquables */
+body.cursor-hover #cursor-dot {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
 }
+
+/* Masqué sur écrans tactiles */
+@media (pointer: coarse) {
+  #cursor-dot { display: none; }
+}
+
+/* On cache l'anneau complètement */
+#cursor-ring { display: none; }
+
 
 /* ============================================================
    6. LOADER
