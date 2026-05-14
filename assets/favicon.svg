@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Background rounded square -->
+  <rect width="64" height="64" rx="14" fill="#050A14"/>
+
+  <!-- Accent glow layer -->
+  <rect width="64" height="64" rx="14" fill="url(#glowGrad)" opacity="0.3"/>
+
+  <!-- Border accent -->
+  <rect x="1" y="1" width="62" height="62" rx="13" stroke="#0066FF" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Letter B — left vertical bar -->
+  <rect x="14" y="16" width="4" height="32" rx="2" fill="#0066FF"/>
+
+  <!-- Letter B — top horizontal -->
+  <rect x="14" y="16" width="16" height="4" rx="2" fill="#0066FF"/>
+
+  <!-- Letter B — middle horizontal -->
+  <rect x="14" y="29" width="14" height="3.5" rx="1.75" fill="#0066FF"/>
+
+  <!-- Letter B — bottom horizontal -->
+  <rect x="14" y="44" width="16" height="4" rx="2" fill="#0066FF"/>
+
+  <!-- Letter B — top bump -->
+  <rect x="26" y="16" width="4" height="17" rx="2" fill="#0066FF"/>
+
+  <!-- Letter B — bottom bump -->
+  <rect x="28" y="29" width="4" height="19" rx="2" fill="#0066FF"/>
+
+  <!-- Slash separator -->
+  <line x1="36" y1="48" x2="44" y2="16" stroke="#0066FF" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Dot accent (top right) -->
+  <circle cx="52" cy="18" r="3" fill="#0066FF" opacity="0.85"/>
+
+  <!-- Gradient definition -->
+  <defs>
+    <radialGradient id="glowGrad" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#0066FF" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#050A14" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

@@ -1,0 +1,486 @@
+/* ============================================================
+   PORTFOLIO — BRAHIM ZAKARIA BRAHIM
+   animations.css — Scroll Reveals · Keyframes · Transitions
+   ============================================================ */
+
+/* ============================================================
+   1. SCROLL REVEAL — BASE STATE
+   Elements start hidden; JS adds .visible to trigger animation
+   ============================================================ */
+
+.reveal-up,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+  opacity: 0;
+  transition:
+    opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+/* Initial transform states */
+.reveal-up    { transform: translateY(40px); }
+.reveal-left  { transform: translateX(-40px); }
+.reveal-right { transform: translateX(40px); }
+.reveal-scale { transform: scale(0.92) translateY(20px); }
+
+/* Visible state — triggered by IntersectionObserver */
+.reveal-up.visible,
+.reveal-left.visible,
+.reveal-right.visible,
+.reveal-scale.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================
+   2. STAGGERED CHILDREN ANIMATION
+   Apply .stagger-children on a parent; children animate in sequence
+   ============================================================ */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stagger-children.visible > *:nth-child(1)  { transition-delay: 0.05s; }
+.stagger-children.visible > *:nth-child(2)  { transition-delay: 0.10s; }
+.stagger-children.visible > *:nth-child(3)  { transition-delay: 0.15s; }
+.stagger-children.visible > *:nth-child(4)  { transition-delay: 0.20s; }
+.stagger-children.visible > *:nth-child(5)  { transition-delay: 0.25s; }
+.stagger-children.visible > *:nth-child(6)  { transition-delay: 0.30s; }
+
+.stagger-children.visible > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================
+   3. HERO ENTRANCE ANIMATIONS
+   Run once on page load after loader disappears
+   ============================================================ */
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88) translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* These classes are applied by JS after loader hides */
+.animate-hero .reveal-up {
+  animation: heroFadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-hero .reveal-scale {
+  animation: heroScaleIn 0.8s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+
+/* ============================================================
+   4. GRADIENT TEXT ANIMATION
+   ============================================================ */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--accent-light),
+    #00AAFF,
+    var(--accent),
+    var(--accent-dark)
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 6s ease infinite;
+}
+
+/* ============================================================
+   5. GLOW PULSE — Accent elements
+   ============================================================ */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 28px var(--accent-glow), 0 0 48px rgba(0, 102, 255, 0.15);
+  }
+}
+
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* ============================================================
+   6. SKILL BAR FILL ANIMATION
+   Triggered when skill section enters viewport
+   ============================================================ */
+@keyframes fillBar {
+  from { width: 0; opacity: 0.5; }
+  to   { width: var(--pct); opacity: 1; }
+}
+
+.skill-fill.animated {
+  animation: fillBar 1.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Stagger skill bars within a card */
+.skill-card.visible .skill-item:nth-child(1) .skill-fill { animation-delay: 0.1s; }
+.skill-card.visible .skill-item:nth-child(2) .skill-fill { animation-delay: 0.25s; }
+.skill-card.visible .skill-item:nth-child(3) .skill-fill { animation-delay: 0.4s; }
+
+/* ============================================================
+   7. CARD HOVER — Shimmer effect on glass cards
+   ============================================================ */
+.glass-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 80%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass-card:hover::before {
+  left: 150%;
+}
+
+/* ============================================================
+   8. CONTACT ITEM — Slide highlight
+   ============================================================ */
+.contact-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 0;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.contact-item:hover::after {
+  height: 100%;
+}
+
+/* ============================================================
+   9. NAV LINK UNDERLINE
+   ============================================================ */
+.nav-link,
+.mobile-link {
+  position: relative;
+}
+
+/* Active section indicator dot */
+.nav-link.active {
+  color: var(--accent);
+}
+
+/* ============================================================
+  10. TYPING CURSOR BLINK
+   ============================================================ */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.typing-cursor {
+  animation: cursorBlink 0.9s step-end infinite;
+  margin-left: 1px;
+}
+
+/* ============================================================
+   11. SCROLL INDICATOR
+   ============================================================ */
+@keyframes scrollPulse {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(10px);
+    opacity: 0;
+  }
+}
+
+.scroll-indicator {
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   12. ORBIT ICONS — Independent float keyframes
+   ============================================================ */
+@keyframes floatA {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes floatB {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-7px) rotate(-3deg); }
+}
+
+@keyframes floatC {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes floatD {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-8px) rotate(-2deg); }
+}
+
+.orbit-icon-1 { animation: floatA 4.0s ease-in-out infinite; }
+.orbit-icon-2 { animation: floatB 4.8s ease-in-out infinite; }
+.orbit-icon-3 { animation: floatC 3.6s ease-in-out infinite; }
+.orbit-icon-4 { animation: floatD 5.2s ease-in-out infinite; }
+
+/* ============================================================
+   13. AVATAR RING ROTATION VARIANTS
+   ============================================================ */
+@keyframes rotateClockwise {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotateCounter {
+  to { transform: rotate(-360deg); }
+}
+
+.ring-1 { animation: rotateClockwise 18s linear infinite; }
+.ring-2 { animation: rotateCounter  14s linear infinite; }
+.ring-3 { animation: rotateClockwise 22s linear infinite; }
+
+/* ============================================================
+   14. PAGE TRANSITION — Section background alternation
+   ============================================================ */
+.about-section,
+.projects-section,
+.services-section {
+  position: relative;
+}
+
+.about-section::before,
+.projects-section::before,
+.services-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 40% at 80% 50%,
+    var(--accent-subtle),
+    transparent
+  );
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ============================================================
+   15. FORM INPUT FOCUS ANIMATION
+   ============================================================ */
+@keyframes inputFocus {
+  from { box-shadow: 0 0 0 0 var(--accent-subtle); }
+  to   { box-shadow: 0 0 0 4px var(--accent-subtle); }
+}
+
+.form-input:focus {
+  animation: inputFocus 0.2s ease forwards;
+}
+
+/* ============================================================
+   16. SUBMIT BUTTON — SPIN LOADER ICON
+   ============================================================ */
+@keyframes spinIcon {
+  to { transform: rotate(360deg); }
+}
+
+.btn.loading .btn-loading {
+  display: inline-flex;
+  animation: spinIcon 0.8s linear infinite;
+}
+
+/* ============================================================
+   17. SUCCESS / ERROR FEEDBACK ENTRANCE
+   ============================================================ */
+@keyframes feedbackIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-feedback.success,
+.form-feedback.error-msg {
+  animation: feedbackIn 0.35s ease both;
+}
+
+/* ============================================================
+   18. BACK TO TOP BUTTON
+   ============================================================ */
+@keyframes backToTopIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.back-to-top.visible {
+  animation: backToTopIn 0.35s ease both;
+}
+
+/* ============================================================
+   19. TIMELINE DOT ENTRANCE
+   ============================================================ */
+@keyframes dotAppear {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.timeline-item.visible .timeline-dot {
+  animation: dotAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: 0.2s;
+}
+
+/* ============================================================
+   20. WIP CARD — Dashed border animation
+   ============================================================ */
+@keyframes dashMove {
+  to { background-position: 100% 100%; }
+}
+
+.project-wip {
+  transition: border-color var(--transition-base), transform var(--transition-base);
+}
+
+.project-wip:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+/* ============================================================
+   21. SECTION TAG ENTRANCE
+   ============================================================ */
+@keyframes tagSlideIn {
+  from {
+    opacity: 0;
+    letter-spacing: 0.35em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.15em;
+  }
+}
+
+.section-header.visible .section-tag {
+  animation: tagSlideIn 0.6s ease both;
+}
+
+/* ============================================================
+   22. THEME TOGGLE ICON SWAP
+   ============================================================ */
+@keyframes iconSwap {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(0.6); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.theme-btn.toggling svg {
+  animation: iconSwap 0.4s ease both;
+}
+
+/* ============================================================
+   23. MOBILE MENU LINK STAGGER
+   ============================================================ */
+.mobile-menu.open .mobile-link {
+  animation: heroFadeUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.mobile-menu.open li:nth-child(1) .mobile-link { animation-delay: 0.05s; }
+.mobile-menu.open li:nth-child(2) .mobile-link { animation-delay: 0.10s; }
+.mobile-menu.open li:nth-child(3) .mobile-link { animation-delay: 0.15s; }
+.mobile-menu.open li:nth-child(4) .mobile-link { animation-delay: 0.20s; }
+.mobile-menu.open li:nth-child(5) .mobile-link { animation-delay: 0.25s; }
+.mobile-menu.open li:nth-child(6) .mobile-link { animation-delay: 0.30s; }
+
+/* ============================================================
+   24. REDUCED MOTION — Accessibility
+   Respect user OS preference to reduce animations
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal-up,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1;
+    transform: none;
+  }
+
+  .skill-fill { width: var(--pct); }
+  .orb { display: none; }
+  .hero-grid { display: none; }
+}
